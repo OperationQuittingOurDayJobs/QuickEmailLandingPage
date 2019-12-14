@@ -1,3 +1,4 @@
+console.log("env:", JSON.stringify(process.env, null, 3));
 const https = require("https");
 var fs = require("fs");
 
