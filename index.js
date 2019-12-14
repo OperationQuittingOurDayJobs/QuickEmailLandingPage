@@ -1,6 +1,6 @@
 const https = require("https");
 const fs = require("fs");
-const env = fs.readFileSync("./env.js");
+const env = require("./env.js");
 
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
