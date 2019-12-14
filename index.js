@@ -68,11 +68,11 @@ app.post("/", async (req, res) => {
     console.log("sent email");
     res.redirect("/");
   } catch (e) {
-    console.error("Error submitting:" e);
+    console.error("Error submitting:", e);
     try {
       await sendErrorEmail(e);
     } catch (err) {
-      console.error("error sending submit err", err)
+      console.error("error sending submit err", err);
     }
     res.sendStatus(400);
   }
