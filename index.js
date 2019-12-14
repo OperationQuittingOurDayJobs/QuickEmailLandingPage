@@ -7,8 +7,11 @@ const express = require("express");
 var escape = require("escape-html");
 
 const app = express();
+console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: "22",
+  secure: true,
   auth: {
     type: "OAuth2",
     user: process.env.SENDER_EMAIL_USERNAME,
@@ -16,6 +19,7 @@ const transporter = nodemailer.createTransport({
     privateKey: fs.readFileSync("./gmail_secret.js")
   }
 });
+console.log("Created transporter");
 
 const mailOptions = {
   from: process.env.SENDER_EMAIL_USERNAME,
@@ -24,6 +28,7 @@ const mailOptions = {
 
 const sendNewSubEmail = (email) =>
   new Promise((resolve, reject) => {
+    console.log("sending mail");
     transporter.sendMail(
       {
         ...mailOptions,
@@ -42,6 +47,7 @@ const sendNewSubEmail = (email) =>
 
 const sendErrorEmail = (email) =>
   new Promise((resolve, reject) => {
+    console.log("sending error mail");
     transporter.sendMail(
       {
         ...mailOptions,
