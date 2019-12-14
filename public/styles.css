@@ -1,0 +1,10 @@
+body {
+  background-image: url("/background.jpg");
+  height: 100%;
+}
+
+#content {
+  background-color: white;
+  margin: 15% 15% 0 15%;
+  padding: 5%;
+}
