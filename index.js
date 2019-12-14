@@ -1,3 +1,6 @@
+const https = require("https");
+var fs = require("fs");
+
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const express = require("express");
@@ -70,6 +73,14 @@ app.post("/", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT || 443, function() {
-  console.log("Listening on", this.address());
-});
+https
+  .createServer(
+    {
+      key: fs.readFileSync("server.key"),
+      cert: fs.readFileSync("server.cert")
+    },
+    app
+  )
+  .listen(process.env.PORT || 443, function() {
+    console.log("Listening on", this.address());
+  });
