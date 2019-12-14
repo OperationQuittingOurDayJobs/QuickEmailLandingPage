@@ -12,7 +12,7 @@ console.log("env:", JSON.stringify(env, null, 3));
 console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: "22",
+  port: 465,
   secure: true,
   auth: {
     type: "OAuth2",
