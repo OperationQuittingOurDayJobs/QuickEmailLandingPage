@@ -1,7 +1,7 @@
 console.log("env:", JSON.stringify(env, null, 3));
 const https = require("https");
 const fs = require("fs");
-const env = = fs.readFileSync('./env.js')
+const env = fs.readFileSync("./env.js");
 
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
