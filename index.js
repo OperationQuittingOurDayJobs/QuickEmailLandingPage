@@ -1,4 +1,3 @@
-console.log("env:", JSON.stringify(env, null, 3));
 const https = require("https");
 const fs = require("fs");
 const env = fs.readFileSync("./env.js");
@@ -9,6 +8,7 @@ const express = require("express");
 var escape = require("escape-html");
 
 const app = express();
+console.log("env:", JSON.stringify(env, null, 3));
 console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
