@@ -10,8 +10,10 @@ const app = express();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
+    type: "OAuth2",
     user: process.env.SENDER_EMAIL_USERNAME,
-    pass: process.env.SENDER_EMAIL_PASSWORD
+    serviceClient: process.env.GMAIL_OAUTH2_CLIENT_ID,
+    privateKey: fs.readFileSync("./gmail_secret.js")
   }
 });
 
