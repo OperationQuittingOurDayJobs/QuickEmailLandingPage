@@ -1,6 +1,7 @@
-console.log("env:", JSON.stringify(process.env, null, 3));
+console.log("env:", JSON.stringify(env, null, 3));
 const https = require("https");
-var fs = require("fs");
+const fs = require("fs");
+const env = = fs.readFileSync('./env.js')
 
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -15,16 +16,16 @@ const transporter = nodemailer.createTransport({
   secure: true,
   auth: {
     type: "OAuth2",
-    user: process.env.SENDER_EMAIL_USERNAME,
-    serviceClient: process.env.GMAIL_OAUTH2_CLIENT_ID,
+    user: env.SENDER_EMAIL_USERNAME,
+    serviceClient: env.GMAIL_OAUTH2_CLIENT_ID,
     privateKey: fs.readFileSync("./gmail_secret.js")
   }
 });
 console.log("Created transporter");
 
 const mailOptions = {
-  from: process.env.SENDER_EMAIL_USERNAME,
-  to: process.env.RECIEVER_EMAIL_ADDRESS
+  from: env.SENDER_EMAIL_USERNAME,
+  to: env.RECIEVER_EMAIL_ADDRESS
 };
 
 const sendNewSubEmail = (email) =>
@@ -95,6 +96,6 @@ https
     },
     app
   )
-  .listen(process.env.PORT || 443, function() {
+  .listen(env.PORT || 443, function() {
     console.log("Listening on", this.address());
   });

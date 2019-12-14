@@ -2,3 +2,4 @@
 node_modules
 KnuckleDraggerEmailer-ba55bbccbbc6.json
 gmail_secret.js
+env.js
