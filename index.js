@@ -1,6 +1,7 @@
 const https = require("https");
 const fs = require("fs");
 const env = require("./env.js");
+const privateKey = require("./gmail_secret");
 
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
@@ -18,7 +19,7 @@ const transporter = nodemailer.createTransport({
     type: "OAuth2",
     user: env.SENDER_EMAIL_USERNAME,
     serviceClient: env.GMAIL_OAUTH2_CLIENT_ID,
-    privateKey: fs.readFileSync("./gmail_secret.js")
+    privateKey
   }
 });
 console.log("Created transporter");
