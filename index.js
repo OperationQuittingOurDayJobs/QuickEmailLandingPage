@@ -47,7 +47,7 @@ console.log("Created transporter");
 
 const mailOptions = {
   from: `Knuckledragger SubBot <${env.SENDER_EMAIL_USERNAME}>`,
-  to: env.RECIEVER_EMAIL_ADDRESS
+  to: env.RECEIVER_EMAIL_ADDRESS
 };
 
 const sendNewSubEmail = (email) =>
