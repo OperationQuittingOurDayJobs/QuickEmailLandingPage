@@ -32,23 +32,27 @@ const refreshAccessToken = async ({
   oauth_client_id,
   oauth_secret
 }) => {
-  const {
-    data: {access_token, refresh_token, expires_in}
-  } = await axios.post("https://oauth2.googleapis.com/token", {
-    "Content-Type": "application/x-www-form-urlencoded",
-    code: authToken,
-    client_id: oauth_client_id,
-    client_secret: oauth_secret,
-    redirect_uri: "https://knuckledraggerrpg.com",
-    grant_type: "authorization_code"
-  });
+  try {
+    const {
+      data: {access_token, refresh_token, expires_in}
+    } = await axios.post("https://oauth2.googleapis.com/token", {
+      "Content-Type": "application/x-www-form-urlencoded",
+      code: authToken,
+      client_id: oauth_client_id,
+      client_secret: oauth_secret,
+      redirect_uri: "https://knuckledraggerrpg.com",
+      grant_type: "authorization_code"
+    });
 
-  return {
-    ...auth_settings,
-    accessToken: access_token,
-    refreshToken: refresh_token,
-    expires: new Date(new Date().getTime() + expires_in * 1000).getTime()
-  };
+    return {
+      ...auth_settings,
+      accessToken: access_token,
+      refreshToken: refresh_token,
+      expires: new Date(new Date().getTime() + expires_in * 1000).getTime()
+    };
+  } catch (e) {
+    console.error("error refreshing", e);
+  }
 };
 
 const app = express();
