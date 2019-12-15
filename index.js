@@ -68,7 +68,7 @@ const mailOptions = {
   to: env.RECEIVER_EMAIL_ADDRESS
 };
 
-const sendNewSubEmail = (email) =>
+const sendNewSubEmail = async (email) =>
   new Promise((resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings)
