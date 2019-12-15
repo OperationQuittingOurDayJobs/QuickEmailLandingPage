@@ -15,7 +15,9 @@ console.log("env:", JSON.stringify(env, null, 3));
 
 console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: "smtp.gmail.com",
+  secure: true,
+  port: 465,
   auth: {
     xoauth2: xoauth2.createXOAuth2Generator({
       user: client_email,
