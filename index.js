@@ -17,6 +17,21 @@ const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
 
 console.log("Creating transporter");
+console.log(
+  "creds: ",
+  JSON.stringify(
+    {
+      type: "OAuth2",
+      user: env.SENDER_EMAIL_USERNAME,
+      clientId: oauth_client_id,
+      clientSecret: oauth_secret,
+      refreshToken,
+      accessToken
+    },
+    null,
+    3
+  )
+);
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   secure: true,
