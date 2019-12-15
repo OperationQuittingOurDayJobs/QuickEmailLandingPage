@@ -12,6 +12,7 @@ const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
 console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
+  service: "Gmail",
   host: "smtp.gmail.com",
   port: 465,
   secure: true,
