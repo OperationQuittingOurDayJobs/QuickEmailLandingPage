@@ -1,32 +1,36 @@
 const https = require("https");
 const fs = require("fs");
-const env = require("./env.js");
-const privateKey = require("./gmail_secret");
-
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const express = require("express");
 var escape = require("escape-html");
+const xoauth2 = require("xoauth2");
+
+const env = require("./env.js");
+const {client_id, private_key, client_email} = require("./gmail_creds.json");
+const clientSecret = require("./gmail_secret");
 
 const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
+
 console.log("Creating transporter");
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  service: "gmail",
   auth: {
+    xoauth2: xoauth2.createXOAuth2Generator({
+      user: client_email,
+      clientId: client_id,
+      clientSecret: private_key,
+      refreshToken: ""
+    }),
     type: "OAuth2",
-    user: env.SENDER_EMAIL_USERNAME,
-    serviceClient: env.GMAIL_OAUTH2_CLIENT_ID,
-    privateKey
+    serviceClient: env.GMAIL_OAUTH2_CLIENT_ID
   }
 });
 console.log("Created transporter");
 
 const mailOptions = {
-  from: env.SENDER_EMAIL_USERNAME,
+  from: `Knuckledragger SubBot <${env.SENDER_EMAIL_USERNAME}>`,
   to: env.RECIEVER_EMAIL_ADDRESS
 };
 

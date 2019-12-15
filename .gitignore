@@ -1,5 +1,7 @@
 *.pem
 node_modules
 KnuckleDraggerEmailer-ba55bbccbbc6.json
+KnuckleDraggerEmail-a80d441833ea.json
 gmail_secret.js
+gmail_creds.json
 env.js
