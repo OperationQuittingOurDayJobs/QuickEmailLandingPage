@@ -10,7 +10,8 @@ const {
   oauth_client_id,
   oauth_secret,
   refreshToken,
-  accessToken
+  accessToken,
+  secondsToExpire
 } = require("./gmail_creds.json");
 
 const app = express();
@@ -26,7 +27,8 @@ console.log(
       clientId: oauth_client_id,
       clientSecret: oauth_secret,
       refreshToken,
-      accessToken
+      accessToken,
+      expires: new Date(new Date().getTime() + secondsToExpire * 1000).getTime()
     },
     null,
     3
