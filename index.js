@@ -33,9 +33,7 @@ console.log(
   )
 );
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  secure: true,
-  port: 465,
+  service: "gmail",
   auth: {
     type: "OAuth2",
     user: env.SENDER_EMAIL_USERNAME,
@@ -71,14 +69,14 @@ const sendNewSubEmail = (email) =>
     );
   });
 
-const sendErrorEmail = (email) =>
+const sendErrorEmail = (error) =>
   new Promise((resolve, reject) => {
     console.log("sending error mail");
     transporter.sendMail(
       {
         ...mailOptions,
         subject: "Error in KD Landing Page",
-        text: email
+        text: error
       },
       (error, info) => {
         if (error) {
