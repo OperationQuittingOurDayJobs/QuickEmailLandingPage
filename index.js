@@ -30,7 +30,7 @@ let auth_settings = {
 const refreshAccessToken = async ({
   authToken,
   oauth_client_id,
-  oauth_secret,
+  oauth_secret
 }) => {
   const {
     data: {access_token, refresh_token, expires_in}
@@ -69,9 +69,9 @@ const mailOptions = {
 };
 
 const sendNewSubEmail = async (email) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
-      auth_settings = await refreshAccessToken(auth_settings)
+      auth_settings = await refreshAccessToken(auth_settings);
       transporter = nodemailer.createTransport({
         service: "gmail",
         auth: auth_settings
