@@ -1,39 +1,47 @@
 const https = require("https");
 const fs = require("fs");
+// const axios = require("axios");
 const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const express = require("express");
 var escape = require("escape-html");
 
 const env = require("./env.js");
+
 const {
   oauth_client_id,
   oauth_secret,
+  // authToken,
   refreshToken,
   accessToken,
   expires
 } = require("./gmail_creds.json");
 
+// let auth_settings = {
+//   type: "OAuth2",
+//   user: env.SENDER_EMAIL_USERNAME,
+//   clientId: oauth_client_id,
+//   clientSecret: oauth_secret,
+//   refreshToken,
+//   accessToken
+// };
+
+// const refreshAccessToken = async () => {
+//   const {data} = await axios.post("https://oauth2.googleapis.com/token", {
+//     "Content-Type": "application/x-www-form-urlencoded",
+//     code: authToken,
+//     client_id: oauth_client_id,
+//     client_secret: oauth_secret,
+//     redirect_uri: "https://knuckledraggerrpg.com",
+//     grant_type: "authorization_code"
+//   });
+// };
+
 const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
 
 console.log("Creating transporter");
-console.log(
-  "creds: ",
-  JSON.stringify(
-    {
-      type: "OAuth2",
-      user: env.SENDER_EMAIL_USERNAME,
-      clientId: oauth_client_id,
-      clientSecret: oauth_secret,
-      refreshToken,
-      accessToken,
-      expires
-    },
-    null,
-    3
-  )
-);
+console.log("creds: ", JSON.stringify(null, 3));
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -42,7 +50,8 @@ const transporter = nodemailer.createTransport({
     clientId: oauth_client_id,
     clientSecret: oauth_secret,
     refreshToken,
-    accessToken
+    accessToken,
+    expires
   }
 });
 console.log("Created transporter");
