@@ -113,8 +113,8 @@ app.post("/", async (req, res) => {
 https
   .createServer(
     {
-      key: fs.readFileSync(process.env.SSL_KEY_PATH),
-      cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+      key: fs.readFileSync(process.env.SSL_KEY_PATH, "utf8"),
+      cert: fs.readFileSync(process.env.SSL_CERT_PATH, "utf8")
     },
     app
   )
