@@ -4,15 +4,14 @@ const bodyParser = require("body-parser");
 const nodemailer = require("nodemailer");
 const express = require("express");
 var escape = require("escape-html");
-const xoauth2 = require("xoauth2");
 
 const env = require("./env.js");
 const {
   oauth_client_id,
   oauth_secret,
-  refreshToken
+  refreshToken,
+  accessToken
 } = require("./gmail_creds.json");
-const clientSecret = require("./gmail_secret");
 
 const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
@@ -23,12 +22,12 @@ const transporter = nodemailer.createTransport({
   secure: true,
   port: 465,
   auth: {
-    xoauth2: xoauth2.createXOAuth2Generator({
-      user: env.SENDER_EMAIL_USERNAME,
-      clientId: oauth_client_id,
-      clientSecret: oauth_secret,
-      refreshToken
-    })
+    type: "OAuth2",
+    user: env.SENDER_EMAIL_USERNAME,
+    clientId: oauth_client_id,
+    clientSecret: oauth_secret,
+    refreshToken,
+    accessToken
   }
 });
 console.log("Created transporter");
