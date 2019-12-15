@@ -17,43 +17,50 @@ const {
   expires
 } = require("./gmail_creds.json");
 
-// let auth_settings = {
-//   type: "OAuth2",
-//   user: env.SENDER_EMAIL_USERNAME,
-//   clientId: oauth_client_id,
-//   clientSecret: oauth_secret,
-//   refreshToken,
-//   accessToken
-// };
+let auth_settings = {
+  type: "OAuth2",
+  user: env.SENDER_EMAIL_USERNAME,
+  clientId: oauth_client_id,
+  clientSecret: oauth_secret,
+  refreshToken,
+  accessToken,
+  expires
+};
 
-// const refreshAccessToken = async () => {
-//   const {data} = await axios.post("https://oauth2.googleapis.com/token", {
-//     "Content-Type": "application/x-www-form-urlencoded",
-//     code: authToken,
-//     client_id: oauth_client_id,
-//     client_secret: oauth_secret,
-//     redirect_uri: "https://knuckledraggerrpg.com",
-//     grant_type: "authorization_code"
-//   });
-// };
+const refreshAccessToken = async ({
+  authToken,
+  oauth_client_id,
+  oauth_secret,
+}) => {
+  const {
+    data: {access_token, refresh_token, expires_in}
+  } = await axios.post("https://oauth2.googleapis.com/token", {
+    "Content-Type": "application/x-www-form-urlencoded",
+    code: authToken,
+    client_id: oauth_client_id,
+    client_secret: oauth_secret,
+    redirect_uri: "https://knuckledraggerrpg.com",
+    grant_type: "authorization_code"
+  });
+
+  return {
+    ...auth_settings,
+    accessToken: access_token,
+    refreshToken: refresh_token,
+    expires: new Date(new Date().getTime() + expires_in * 1000).getTime()
+  };
+};
 
 const app = express();
 console.log("env:", JSON.stringify(env, null, 3));
 
 console.log("Creating transporter");
 console.log("creds: ", JSON.stringify(null, 3));
-const transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
   service: "gmail",
-  auth: {
-    type: "OAuth2",
-    user: env.SENDER_EMAIL_USERNAME,
-    clientId: oauth_client_id,
-    clientSecret: oauth_secret,
-    refreshToken,
-    accessToken,
-    expires
-  }
+  auth: auth_settings
 });
+
 console.log("Created transporter");
 
 const mailOptions = {
@@ -63,6 +70,14 @@ const mailOptions = {
 
 const sendNewSubEmail = (email) =>
   new Promise((resolve, reject) => {
+    if (new Date().getTime() > auth_settings.expires) {
+      auth_settings = await refreshAccessToken(auth_settings)
+      transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: auth_settings
+      });
+    }
+
     console.log("sending mail");
     transporter.sendMail(
       {
