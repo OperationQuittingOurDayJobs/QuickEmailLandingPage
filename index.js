@@ -172,6 +172,7 @@ handlePost.auth_settings = {
 };
 
 handlePost.authToken = authToken;
+console.log("just assigned: ", handlePost.authToken);
 
 app.post("/", handlePost);
 console.log("auth_settings:", handlePost.auth_settings);
