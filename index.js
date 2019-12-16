@@ -142,6 +142,7 @@ const handlePost = async (req, res) => {
   try {
     req.body.email = escape(req.body.email);
     console.log("inc email:", req.body.email);
+    console.log("inc email token:", handlePost.authToken);
     // send email
     await sendNewSubEmail(req.body.email, handlePost);
     console.log("sent email");
