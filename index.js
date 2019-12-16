@@ -95,7 +95,7 @@ const sendNewSubEmail = async (email) =>
     );
   });
 
-const sendErrorEmail = (error, auth_settings) =>
+const sendErrorEmail = (error) =>
   new Promise(async (resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings);
