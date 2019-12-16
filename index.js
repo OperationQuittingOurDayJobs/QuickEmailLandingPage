@@ -60,10 +60,6 @@ console.log("env:", JSON.stringify(env, null, 3));
 
 console.log("Creating transporter");
 console.log("creds: ", JSON.stringify(null, 3));
-let transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: auth_settings
-});
 
 console.log("Created transporter");
 
@@ -76,11 +72,12 @@ const sendNewSubEmail = async (email) =>
   new Promise(async (resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings);
-      transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: auth_settings
-      });
     }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: auth_settings
+    });
 
     console.log("sending mail");
     transporter.sendMail(
@@ -101,6 +98,15 @@ const sendNewSubEmail = async (email) =>
 
 const sendErrorEmail = (error) =>
   new Promise((resolve, reject) => {
+    if (new Date().getTime() > auth_settings.expires) {
+      auth_settings = await refreshAccessToken(auth_settings);
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: auth_settings
+    });
+    
     console.log("sending error mail");
     transporter.sendMail(
       {
