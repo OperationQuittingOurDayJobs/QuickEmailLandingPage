@@ -69,7 +69,7 @@ const sendNewSubEmail = async (email, handlePost) =>
       handlePost.auth_settings = await refreshAccessToken(
         handlePost.auth_settings,
         handlePost.auth_settings,
-        authToken
+        handlePost.authToken
       );
     }
     console.log("this email auth_settings", handlePost.auth_settings);
@@ -102,7 +102,9 @@ const sendErrorEmail = (error, handlePost) =>
     try {
       if (new Date().getTime() > handlePost.auth_settings.expires) {
         handlePost.auth_settings = await refreshAccessToken(
-          handlePost.auth_settings
+          handlePost.auth_settings,
+          handlePost.auth_settings,
+          handlePost.authToken
         );
       }
 
@@ -166,6 +168,8 @@ handlePost.auth_settings = {
   accessToken,
   expires
 };
+
+handlePost.authToken = authToken;
 
 app.post("/", handlePost);
 console.log("auth_settings:", handlePost.auth_settings);
