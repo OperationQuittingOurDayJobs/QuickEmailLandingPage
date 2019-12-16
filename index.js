@@ -20,7 +20,7 @@ const {
 const app = express();
 
 const refreshAccessToken = async (
-  {authToken, clientId, clientSecret},
+  {clientId, clientSecret},
   auth_settings,
   authToken
 ) => {
@@ -28,10 +28,10 @@ const refreshAccessToken = async (
     console.log(
       "authToken",
       authToken,
-      "oauth_client_id",
-      oauth_client_id,
-      "oauth_secret",
-      oauth_secret
+      "clientId",
+      clientId,
+      "clientSecret",
+      clientSecret
     );
     console.log(auth_settings);
     const {
