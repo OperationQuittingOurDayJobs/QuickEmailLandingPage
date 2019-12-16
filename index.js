@@ -11,7 +11,7 @@ const env = require("./env.js");
 const {
   oauth_client_id,
   oauth_secret,
-  // authToken,
+  authToken,
   refreshToken,
   accessToken,
   expires
@@ -20,8 +20,9 @@ const {
 const app = express();
 
 const refreshAccessToken = async (
-  {authToken, oauth_client_id, oauth_secret},
-  auth_settings
+  {authToken, clientId, clientSecret},
+  auth_settings,
+  authToken
 ) => {
   try {
     console.log(
@@ -39,8 +40,8 @@ const refreshAccessToken = async (
       url: "https://oauth2.googleapis.com/token",
       method: "POST",
       code: authToken,
-      client_id: oauth_client_id,
-      client_secret: oauth_secret,
+      client_id: clientId,
+      client_secret: clientSecret,
       redirect_uri: "https://knuckledraggerrpg.com",
       grant_type: "authorization_code"
     });
@@ -66,7 +67,9 @@ const sendNewSubEmail = async (email, handlePost) =>
     console.log("this email auth_settings", handlePost.auth_settings);
     if (new Date().getTime() > handlePost.auth_settings.expires) {
       handlePost.auth_settings = await refreshAccessToken(
-        handlePost.auth_settings
+        handlePost.auth_settings,
+        handlePost.auth_settings,
+        authToken
       );
     }
     console.log("this email auth_settings", handlePost.auth_settings);
