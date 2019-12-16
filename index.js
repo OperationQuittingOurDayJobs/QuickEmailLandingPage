@@ -36,7 +36,6 @@ const refreshAccessToken = async ({
     const {
       data: {access_token, refresh_token, expires_in}
     } = await axios.post("https://oauth2.googleapis.com/token", {
-      "Content-Type": "application/x-www-form-urlencoded",
       code: authToken,
       client_id: oauth_client_id,
       client_secret: oauth_secret,
@@ -96,7 +95,7 @@ const sendNewSubEmail = async (email) =>
     );
   });
 
-const sendErrorEmail = (error) =>
+const sendErrorEmail = (error, auth_settings) =>
   new Promise(async (resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings);
