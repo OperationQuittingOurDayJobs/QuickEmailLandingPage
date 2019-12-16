@@ -26,7 +26,9 @@ const refreshAccessToken = async (
   try {
     const {
       data: {access_token, refresh_token, expires_in}
-    } = await axios.post("https://oauth2.googleapis.com/token", {
+    } = await axios({
+      url: "https://oauth2.googleapis.com/token",
+      method: "POST",
       code: authToken,
       client_id: oauth_client_id,
       client_secret: oauth_secret,
