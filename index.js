@@ -97,7 +97,7 @@ const sendNewSubEmail = async (email) =>
   });
 
 const sendErrorEmail = (error) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings);
     }
@@ -106,7 +106,7 @@ const sendErrorEmail = (error) =>
       service: "gmail",
       auth: auth_settings
     });
-    
+
     console.log("sending error mail");
     transporter.sendMail(
       {
