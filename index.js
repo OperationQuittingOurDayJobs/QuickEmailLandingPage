@@ -71,9 +71,11 @@ console.log("Mail options:", mailOptions);
 
 const sendNewSubEmail = async (email) =>
   new Promise(async (resolve, reject) => {
+    console.log("this email auth_settings", auth_settings);
     if (new Date().getTime() > auth_settings.expires) {
       auth_settings = await refreshAccessToken(auth_settings);
     }
+    console.log("this email auth_settings", auth_settings);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -81,6 +83,7 @@ const sendNewSubEmail = async (email) =>
     });
 
     console.log("sending mail");
+
     transporter.sendMail(
       {
         ...mailOptions,
@@ -133,6 +136,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.post("/", async (req, res) => {
+  console.log("got req");
   try {
     req.body.email = escape(req.body.email);
     console.log("inc email:", req.body.email);
@@ -143,6 +147,7 @@ app.post("/", async (req, res) => {
   } catch (e) {
     console.error("Error submitting:", e);
     try {
+      console.log("sending err");
       await sendErrorEmail(e);
     } catch (err) {
       console.error("error sending submit err", err);
