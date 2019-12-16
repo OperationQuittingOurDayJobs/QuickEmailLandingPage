@@ -65,6 +65,7 @@ const mailOptions = {
 const sendNewSubEmail = async (email, handlePost) =>
   new Promise(async (resolve, reject) => {
     console.log("this email auth_settings", handlePost.auth_settings);
+    console.log("this email authToken", handlePost.authToken);
     if (new Date().getTime() > handlePost.auth_settings.expires) {
       handlePost.auth_settings = await refreshAccessToken(
         handlePost.auth_settings,
