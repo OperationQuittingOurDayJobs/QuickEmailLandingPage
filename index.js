@@ -19,21 +19,10 @@ const {
 
 const app = express();
 
-let auth_settings = {
-  type: "OAuth2",
-  user: env.SENDER_EMAIL_USERNAME,
-  clientId: oauth_client_id,
-  clientSecret: oauth_secret,
-  refreshToken,
-  accessToken,
-  expires
-};
-
-const refreshAccessToken = async ({
-  authToken,
-  oauth_client_id,
-  oauth_secret
-}) => {
+const refreshAccessToken = async (
+  {authToken, oauth_client_id, oauth_secret},
+  auth_settings
+) => {
   try {
     const {
       data: {access_token, refresh_token, expires_in}
@@ -61,25 +50,19 @@ const mailOptions = {
   to: env.RECEIVER_EMAIL_ADDRESS
 };
 
-console.log("auth_settings:", auth_settings);
-
-console.log("env:", JSON.stringify(env, null, 3));
-
-console.log("creds: ", JSON.stringify(null, 3));
-
-console.log("Mail options:", mailOptions);
-
-const sendNewSubEmail = async (email) =>
+const sendNewSubEmail = async (email, handlePost) =>
   new Promise(async (resolve, reject) => {
-    console.log("this email auth_settings", auth_settings);
+    console.log("this email auth_settings", handlePost.auth_settings);
     if (new Date().getTime() > auth_settings.expires) {
-      auth_settings = await refreshAccessToken(auth_settings);
+      handlePost.auth_settings = await refreshAccessToken(
+        handlePost.auth_settings
+      );
     }
-    console.log("this email auth_settings", auth_settings);
+    console.log("this email auth_settings", handlePost.auth_settings);
 
     const transporter = nodemailer.createTransport({
       service: "gmail",
-      auth: auth_settings
+      auth: handlePost.auth_settings
     });
 
     console.log("sending mail");
@@ -100,16 +83,18 @@ const sendNewSubEmail = async (email) =>
     );
   });
 
-const sendErrorEmail = (error) =>
+const sendErrorEmail = (error, handlePost) =>
   new Promise(async (resolve, reject) => {
     try {
-      if (new Date().getTime() > auth_settings.expires) {
-        auth_settings = await refreshAccessToken(auth_settings);
+      if (new Date().getTime() > handlePost.auth_settings.expires) {
+        handlePost.auth_settings = await refreshAccessToken(
+          handlePost.auth_settings
+        );
       }
 
       const transporter = nodemailer.createTransport({
         service: "gmail",
-        auth: auth_settings
+        auth: handlePost.auth_settings
       });
 
       console.log("sending error mail");
@@ -135,20 +120,20 @@ const sendErrorEmail = (error) =>
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.post("/", async (req, res) => {
+const handlePost = async (req, res) => {
   console.log("got req");
   try {
     req.body.email = escape(req.body.email);
     console.log("inc email:", req.body.email);
     // send email
-    await sendNewSubEmail(req.body.email);
+    await sendNewSubEmail(req.body.email, handlePost);
     console.log("sent email");
     res.redirect("/");
   } catch (e) {
     console.error("Error submitting:", e);
     try {
       console.log("sending err");
-      await sendErrorEmail(e);
+      await sendErrorEmail(e, handlePost);
     } catch (err) {
       console.error("error sending submit err", err);
       res.sendStatus(400);
@@ -156,8 +141,26 @@ app.post("/", async (req, res) => {
     }
     res.sendStatus(400);
   }
-});
+};
 
+handlePost.auth_settings = {
+  type: "OAuth2",
+  user: env.SENDER_EMAIL_USERNAME,
+  clientId: oauth_client_id,
+  clientSecret: oauth_secret,
+  refreshToken,
+  accessToken,
+  expires
+};
+
+app.post("/", handlePost);
+console.log("auth_settings:", handlePost.auth_settings);
+
+console.log("env:", JSON.stringify(env, null, 3));
+
+console.log("creds: ", JSON.stringify(null, 3));
+
+console.log("Mail options:", mailOptions);
 https
   .createServer(
     {
