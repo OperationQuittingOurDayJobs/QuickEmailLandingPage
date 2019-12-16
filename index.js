@@ -173,12 +173,11 @@ handlePost.authToken = authToken;
 
 app.post("/", handlePost);
 console.log("auth_settings:", handlePost.auth_settings);
-
+console.log("authToken", handlePost.authToken);
 console.log("env:", JSON.stringify(env, null, 3));
-
 console.log("creds: ", JSON.stringify(null, 3));
-
 console.log("Mail options:", mailOptions);
+
 https
   .createServer(
     {
