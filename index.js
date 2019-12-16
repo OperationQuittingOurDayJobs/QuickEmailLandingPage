@@ -24,6 +24,15 @@ const refreshAccessToken = async (
   auth_settings
 ) => {
   try {
+    console.log(
+      "authToken",
+      authToken,
+      "oauth_client_id",
+      oauth_client_id,
+      "oauth_secret",
+      oauth_secret
+    );
+    console.log(auth_settings);
     const {
       data: {access_token, refresh_token, expires_in}
     } = await axios({
@@ -43,7 +52,7 @@ const refreshAccessToken = async (
       expires: new Date(new Date().getTime() + expires_in * 1000).getTime()
     };
   } catch (e) {
-    console.error("error refreshing", e);
+    console.error("error refreshing", e.message);
   }
 };
 
