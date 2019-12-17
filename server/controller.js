@@ -5,7 +5,7 @@ module.exports = async (req, res) => {
   try {
     req.body.email = escape(req.body.email);
     await sendNewSubEmail(req.body.email);
-    res.redirect("/");
+    res.redirect("/thankyou.html");
   } catch (e) {
     try {
       await sendErrorEmail(e);
