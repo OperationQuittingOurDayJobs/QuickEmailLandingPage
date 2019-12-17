@@ -1,5 +1,5 @@
 var escape = require("escape-html");
-const {sendErrorEmail, sendNewSubEmail} = require("./server/sendEmail.js");
+const {sendErrorEmail, sendNewSubEmail} = require("./sendEmail.js");
 
 module.exports = async (req, res) => {
   try {
