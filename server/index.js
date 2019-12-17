@@ -2,7 +2,7 @@ const https = require("https");
 const fs = require("fs");
 const bodyParser = require("body-parser");
 const express = require("express");
-const handlePost = require("./controller.js/index.js");
+const handlePost = require("./controller.js");
 const env = require("../env.js");
 
 const app = express();
